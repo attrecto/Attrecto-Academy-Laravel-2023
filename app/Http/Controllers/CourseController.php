@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Requests\CreateCourseRequest;
+use App\Http\Requests\UpdateCourseRequest;
 
 class CourseController extends Controller
 {
@@ -46,9 +48,12 @@ class CourseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateCourseRequest $request)
     {
-        //
+        $data = $request->only(['title','description','author','url']);
+        $course = Course::create($data);
+
+        return response()->json($course,Response::HTTP_CREATED);
     }
 
     /**
@@ -71,9 +76,19 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCourseRequest $request, $id)
     {
-        //
+
+        $data = $request->only(['title','description']);
+        $course = Course::find($id);
+
+        //$course->title = $data['title'];
+        //$course->description = $data['description'];
+        //$course->save();
+
+        $course->update($data);
+
+        return response()->json($course);
     }
 
     /**
@@ -84,6 +99,10 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $course = Course::find($id);
+
+        $course->delete();
+
+        return response()->json('',Response::HTTP_NO_CONTENT);
     }
 }
