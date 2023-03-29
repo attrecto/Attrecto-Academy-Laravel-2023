@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,5 @@ Route::get('/courses/{id}',  [CourseController::class, 'show']);
 
 Route::put('/courses/{id}',[CourseController::class,'update']);
 Route::delete('/courses/{id}',[CourseController::class,'destroy']);
+
+Route::get('/users/{id}',[UserController::class,'show']);
