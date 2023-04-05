@@ -22,7 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/users',[UserController::class,'store']);
-Route::get('/users/{id}',[UserController::class,'show']);
 
 Route::post('/courses',[CourseController::class,'store']);
 Route::get('/courses',  [CourseController::class, 'index']);
@@ -34,6 +33,6 @@ Route::delete('/courses/{id}',[CourseController::class,'destroy']);
 
 Route::post('/auth/login',[AuthController::class,'login']);
 
-Route::group(['middleware' => ['api']], function() {
+Route::group(['middleware' => ['auth:api']], function() {
     Route::get('/users/me', [AuthController::class, 'me']);
 });
