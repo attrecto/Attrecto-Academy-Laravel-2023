@@ -17,22 +17,20 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::prefix('courses')->group(function () {
+    Route::middleware(['api', 'role:admin'])->group(function () {
+        Route::post('/',[CourseController::class,'store']);
+        Route::get('/',  [CourseController::class, 'index']);
+        Route::get('/{id}',  [CourseController::class, 'show']);
+        Route::put('/{id}',[CourseController::class,'update']);
+        Route::delete('/{id}',[CourseController::class,'destroy']);
+    });
 });
 
-Route::post('/users',[UserController::class,'store']);
-
-Route::post('/courses',[CourseController::class,'store']);
-Route::get('/courses',  [CourseController::class, 'index']);
-Route::get('/courses/{id}',  [CourseController::class, 'show']);
-
-Route::put('/courses/{id}',[CourseController::class,'update']);
-Route::delete('/courses/{id}',[CourseController::class,'destroy']);
-
+Route::group(['middleware' => ['api']], function() {
+    Route::get('/users/me', [AuthController::class, 'me']);
+    Route::post('/users',[UserController::class,'store']);
+});
 
 Route::post('/auth/login',[AuthController::class,'login']);
-
-Route::group(['middleware' => ['auth:api']], function() {
-    Route::get('/users/me', [AuthController::class, 'me']);
-});
